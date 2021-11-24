@@ -1,5 +1,4 @@
 import {Entity, model, property, hasMany} from '@loopback/repository';
-import {Pedido} from './pedido.model';
 import {Vehiculo} from './vehiculo.model';
 
 @model({settings: {strict: false}})
@@ -17,9 +16,6 @@ export class Asesor extends Entity {
     required: true,
   })
   nivel: number;
-
-  @hasMany(() => Pedido)
-  pedidos: Pedido[];
 
   @hasMany(() => Vehiculo)
   vehiculos: Vehiculo[];

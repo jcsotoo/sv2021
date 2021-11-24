@@ -31,7 +31,7 @@ export class PedidoClienteController {
     },
   })
   async getCliente(
-    @param.path.number('id') id: typeof Pedido.prototype.pedidoId,
+    @param.path.string('id') id: typeof Pedido.prototype.pedidoId,
   ): Promise<Cliente> {
     return this.pedidoRepository.cliente(id);
   }

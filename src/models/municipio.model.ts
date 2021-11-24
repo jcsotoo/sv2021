@@ -1,4 +1,7 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
+import {Departamento} from './departamento.model';
+import {Usuario} from './usuario.model';
+import {Oficina} from './oficina.model';
 
 @model({settings: {strict: false}})
 export class Municipio extends Entity {
@@ -16,7 +19,14 @@ export class Municipio extends Entity {
   })
   nombre: string;
 
+  @belongsTo(() => Departamento)
+  departamentoId: string;
 
+  @hasMany(() => Usuario)
+  usuarios: Usuario[];
+
+  @hasMany(() => Oficina)
+  oficinas: Oficina[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

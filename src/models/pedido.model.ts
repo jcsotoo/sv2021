@@ -1,17 +1,15 @@
 import {Entity, model, property, belongsTo} from '@loopback/repository';
 import {Cliente} from './cliente.model';
-import {Asesor} from './asesor.model';
-import {Codeudor} from './codeudor.model';
 import {Vehiculo} from './vehiculo.model';
 
 @model({settings: {strict: false}})
 export class Pedido extends Entity {
   @property({
-    type: 'number',
+    type: 'string',
     id: true,
     generated: true,
   })
-  pedidoId?: number;
+  pedidoId?: string;
 
   @property({
     type: 'date',
@@ -44,12 +42,6 @@ export class Pedido extends Entity {
 
   @belongsTo(() => Cliente)
   clienteId: string;
-
-  @belongsTo(() => Asesor)
-  asesorId: string;
-
-  @belongsTo(() => Codeudor)
-  codeudorId: string;
 
   @belongsTo(() => Vehiculo)
   vehiculoId: string;

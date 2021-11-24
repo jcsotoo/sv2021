@@ -1,6 +1,7 @@
 import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
 import {Asesor} from './asesor.model';
 import {Pedido} from './pedido.model';
+import {TipoVehiculo} from './tipo-vehiculo.model';
 import {Oficina} from './oficina.model';
 
 @model({settings: {strict: false}})
@@ -59,6 +60,9 @@ export class Vehiculo extends Entity {
 
   @hasMany(() => Pedido)
   pedidos: Pedido[];
+
+  @belongsTo(() => TipoVehiculo)
+  tipoVehiculoId: number;
 
   @belongsTo(() => Oficina)
   oficinaId: number;

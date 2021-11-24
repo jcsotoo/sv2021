@@ -8,3 +8,4 @@ export * from './oficina.repository';
 export * from './pedido.repository';
 export * from './usuario.repository';
 export * from './vehiculo.repository';
+export * from './tipo-vehiculo.repository';

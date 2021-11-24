@@ -31,7 +31,7 @@ export class PedidoVehiculoController {
     },
   })
   async getVehiculo(
-    @param.path.number('id') id: typeof Pedido.prototype.pedidoId,
+    @param.path.string('id') id: typeof Pedido.prototype.pedidoId,
   ): Promise<Vehiculo> {
     return this.pedidoRepository.vehiculo(id);
   }

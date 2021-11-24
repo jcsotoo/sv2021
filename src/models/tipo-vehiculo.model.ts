@@ -1,16 +1,15 @@
-import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
-import {Municipio} from './municipio.model';
+import {Entity, model, property, hasMany} from '@loopback/repository';
 import {Vehiculo} from './vehiculo.model';
 
 @model({settings: {strict: false}})
-export class Oficina extends Entity {
+export class TipoVehiculo extends Entity {
   @property({
     type: 'number',
     id: true,
     generated: false,
     required: true,
   })
-  oficinaId: number;
+  tipoVehiculo: number;
 
   @property({
     type: 'string',
@@ -18,8 +17,10 @@ export class Oficina extends Entity {
   })
   nombre: string;
 
-  @belongsTo(() => Municipio)
-  municipioId: string;
+  @property({
+    type: 'string',
+  })
+  descripcion?: string;
 
   @hasMany(() => Vehiculo)
   vehiculos: Vehiculo[];
@@ -29,13 +30,13 @@ export class Oficina extends Entity {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;
 
-  constructor(data?: Partial<Oficina>) {
+  constructor(data?: Partial<TipoVehiculo>) {
     super(data);
   }
 }
 
-export interface OficinaRelations {
+export interface TipoVehiculoRelations {
   // describe navigational properties here
 }
 
-export type OficinaWithRelations = Oficina & OficinaRelations;
+export type TipoVehiculoWithRelations = TipoVehiculo & TipoVehiculoRelations;

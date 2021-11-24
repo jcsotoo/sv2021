@@ -8,3 +8,4 @@ export * from './codeudor.model';
 export * from './oficina.model';
 export * from './vehiculo.model';
 export * from './pedido.model';
+export * from './tipo-vehiculo.model';
