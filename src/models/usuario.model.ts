@@ -1,4 +1,4 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Municipio} from './municipio.model';
 
 @model({settings: {strict: false}})
@@ -63,14 +63,14 @@ export class Usuario extends Entity {
   zonaPostal: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     required: true,
   })
-  telefono: number;
+  telefono: string;
 
   @property({
     type: 'string',
-    required: true,
+    required: false,
   })
   estado: string;
 

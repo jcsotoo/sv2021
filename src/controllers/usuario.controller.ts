@@ -1,31 +1,58 @@
+import {service} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, HttpErrors, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
-import {Usuario} from '../models';
+import {Llaves} from '../config/llaves';
+import {Credenciales, Usuario} from '../models';
 import {UsuarioRepository} from '../repositories';
+import {AutenticacionService} from '../services';
+
+const fetch = require('node-fetch');
 
 export class UsuarioController {
   constructor(
     @repository(UsuarioRepository)
-    public usuarioRepository : UsuarioRepository,
-  ) {}
+    public usuarioRepository: UsuarioRepository,
+    @service(AutenticacionService)
+    public servicioAutenticacion: AutenticacionService
+  ) { }
 
+
+  @post("/identificarUsuario", {
+    responses: {
+      '200': {
+        description: "identificación de usuarios"
+      }
+    }
+  })
+  async identificarUsuario(
+    @requestBody() credenciales: Credenciales
+  ) {
+    let u = await this.servicioAutenticacion.IdentificarUsuario(credenciales.usuario, credenciales.clave);
+    if (u) {
+      let token = this.servicioAutenticacion.GenerarTokenJWT(u);
+      return {
+        datos: {
+          nombre: u.nombre,
+          correo: u.email,
+          id: u.usuarioId
+        },
+        tk: token
+      }
+    } else {
+      throw new HttpErrors[401]("Datos inválidos");
+    }
+  }
   @post('/usuarios')
   @response(200, {
     description: 'Usuario model instance',
@@ -44,7 +71,33 @@ export class UsuarioController {
     })
     usuario: Omit<Usuario, 'usuarioId'>,
   ): Promise<Usuario> {
-    return this.usuarioRepository.create(usuario);
+
+    //se comenta para integrar el envío de notificaciones
+    //return this.usuarioRepository.create(usuario);
+    let clave = this.servicioAutenticacion.GenerarClave();
+    let claveCifrada = this.servicioAutenticacion.CifrarClave(clave);
+    usuario.claveAcceso = claveCifrada;
+    let u = await this.usuarioRepository.create(usuario);
+
+    //notificar al usuario
+    let destino = usuario.email;
+    let asunto = 'Registro de la Plataforma';
+    let contenido = `Hola ${usuario.nombre}, su nombre de usuario es: ${usuario.email} y su contraseña es: ${clave}`;
+
+    try {
+      fetch(`${Llaves.urlServicioNotificaciones}/envio-email?correo_destino=${destino}&&asunto=${asunto}&&contenido=${contenido}`)
+        //fetch(`http://127.0.0.1:5000/envio-email?correo_destino=${destino}&&asunto=${asunto}&&contenido=${contenido}`)
+        .then((data: any) => {
+          console.log(data);
+        })
+      return u
+
+    } catch {
+      console.log("error al hacer fetch");
+      return u
+    }
+
+
   }
 
   @get('/usuarios/count')

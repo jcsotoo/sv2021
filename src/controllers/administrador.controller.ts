@@ -1,30 +1,27 @@
+import {authenticate} from '@loopback/Authentication';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
 import {Administrador} from '../models';
 import {AdministradorRepository} from '../repositories';
 
+//@authenticate("admin")
 export class AdministradorController {
   constructor(
     @repository(AdministradorRepository)
-    public administradorRepository : AdministradorRepository,
-  ) {}
+    public administradorRepository: AdministradorRepository,
+  ) { }
+
 
   @post('/administradores')
   @response(200, {
@@ -37,7 +34,7 @@ export class AdministradorController {
         'application/json': {
           schema: getModelSchemaRef(Administrador, {
             title: 'NewAdministrador',
-            
+
           }),
         },
       },
@@ -47,6 +44,7 @@ export class AdministradorController {
     return this.administradorRepository.create(administrador);
   }
 
+  @authenticate.skip()
   @get('/administradores/count')
   @response(200, {
     description: 'Administrador model count',

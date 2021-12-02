@@ -9,3 +9,4 @@ export * from './oficina.model';
 export * from './vehiculo.model';
 export * from './pedido.model';
 export * from './tipo-vehiculo.model';
+export * from './credenciales.model';
